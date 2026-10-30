@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>중랑브리핑 · JUNGNANG BRIEFING (시범판)</title>
+<meta name="description" content="중랑구청 보도자료를 원료로, 무엇이 달라지나·언제·어디서·누구에게 물어보나를 3분 안에 알리는 중랑정책미디어의 쌍둥이 매체 시범판">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="notice">이 매체는 <b>중랑구 정책실(중랑정책주방)</b>이 시범 운영하는 비공식 시범판입니다. 원료는 중랑구청 보도자료이며, 공개 범위와 창간 여부는 아직 정하지 않았습니다.</div>
+<header class="wrap">
+  <div class="topline"><span>중랑정책주방(정책실) · 중랑정책미디어의 쌍둥이 · 시범판 2026.10.26~10.30</span><a href="https://jungnang-media.vercel.app/" target="_blank" rel="noopener">쌍둥이 매체 · 중랑정책미디어 ↗</a></div>
+  <a class="brand" href="#/"><span class="kicker">JUNGNANG BRIEFING</span><span class="logo">중랑<em>브리핑</em><small>시범판</small></span></a>
+  <div class="mottoRow"><div class="motto">중랑의 오늘을, 원문 그대로의 사실로<span>모토 시안 · 발행인 결정 전</span></div><div class="today" id="today"></div></div>
+  <nav class="nav" aria-label="주요 메뉴">
+    <a href="#/" data-r="today">오늘 판</a>
+    <a href="#/archive" data-r="archive">지난 판</a>
+    <a href="#/next" data-r="next">약속 달력</a>
+    <a href="#/design" data-r="design">설계도</a>
+    <a href="#/views" data-r="views">두 시선 · GPT×Claude</a>
+    <a class="ext" href="https://www.jungnang.go.kr/portal/bbs/list/B0000151.do?menuNo=200474" target="_blank" rel="noopener">구청 보도자료 원문 ↗</a>
+  </nav>
+</header>
+<main class="wrap" id="app"></main>
+
+<template id="tpl-design">
+  <h2 class="sec">설계도 <span class="en">BLUEPRINT</span></h2>
+  <p class="secDesc">GPT 외부고문과 Claude 편집국에 같은 질문을 던지고(2026.10.30), 두 답과 Aside의 사실 확인을 합친 시범 설계입니다. <span class="who g">GPT</span> <span class="who c">Claude</span> <span class="who a">Aside</span> 표시는 그 생각이 어디서 왔는지입니다.</p>
+
+  <div class="panel" style="margin-bottom:18px">
+    <h3>한 줄 정의</h3>
+    <p style="margin:0">중랑브리핑은 중랑구청 보도자료를 원료로, 읽는 사람이 <b>무엇이 달라지나 · 언제 · 어디서 · 누구에게 물어보나</b>를 3분 안에 알게 하는 <b>1차 기록 매체</b>입니다.<span class="who c">Claude</span> 보도자료가 기자에게 "써 달라"는 요청이라면, 브리핑은 우리가 먼저 원문 그대로의 사실로 써 두는 기록입니다. 중랑정책미디어가 밖을 보는 <b>망원경</b>이라면, 중랑브리핑은 중랑의 오늘을 비추는 <b>창문</b>입니다.<span class="who g">GPT</span></p>
+  </div>
+
+  <h2 class="sec" style="font-size:21px">쌍둥이 고리</h2>
+  <div class="twinmap">
+    <div class="m"><span class="eyebrow">밖 → 안</span><h3>중랑정책미디어</h3><p style="margin:0;font-size:14.5px">촉(밖의 사실) → 읽기 → 침(의견) → Q. 해외·국내 사례로 "우리라면?"을 묻는다. 독자는 간부·직원.</p></div>
+    <div class="mid"><b>주고받는 것</b>브리핑 → 미디어: '중랑 2' 원료, 공약 이행 기록, 약속 달력<br>미디어 → 브리핑: 기사 끝 '함께 읽기' 링크만<br><b>공통</b>7대 비전 꼬리표 · 같은 진열 데스크</div>
+    <div class="m b"><span class="eyebrow" style="color:var(--teal)">안 → 밖</span><h3>중랑브리핑</h3><p style="margin:0;font-size:14.5px">사실 → 상태(완료·진행·예정) → 다음 일정 → 원문. 해석·평가 없음. 독자는 직원부터, 이후 주민(결정 후).</p></div>
+  </div>
+  <p class="muted" style="font-size:14px">원칙: 정책미디어의 해석은 브리핑 본문에 섞지 않고 링크로만 붙인다.<span class="who c">Claude</span> 브리핑이 쌓은 약속(언제까지 무엇을)은 정책미디어가 후속을 묻는 재료가 된다.<span class="who g">GPT</span><span class="who a">Aside</span></p>
+
+  <div class="cols2" style="margin-top:18px">
+    <div class="panel"><h3>하루 지면</h3><ol>
+      <li><b>머리기사 1건</b>: 주민이 체감하거나 행동해야 하는 것, 영향 범위가 넓은 것 순<span class="who c">Claude</span><span class="who g">GPT</span></li>
+      <li><b>단신 0~3건</b>: 기사가 적은 날은 억지로 채우지 않는다<span class="who g">GPT</span></li>
+      <li><b>오늘의 숫자 1개</b><span class="who c">Claude</span></li>
+      <li><b>다가오는 일정</b>: 약속 달력에서 자동<span class="who a">Aside</span></li>
+      <li><b>원료 목록</b>: 그날 보도자료 원문 링크·부서·등록 시각<span class="who c">Claude</span></li>
+    </ol></div>
+    <div class="panel"><h3>기사 1건 템플릿</h3><ol>
+      <li>분야 · 상태 배지(완료·진행·예정·계획·모집·결과)<span class="who g">GPT</span> · 공약 비전 꼬리표<span class="who a">Aside</span></li>
+      <li>사실형 제목(장소·대상·숫자로 시작) + 부제</li>
+      <li>리드 1~2문장(누가·무엇·어디)</li>
+      <li>핵심 숫자 3개 이내<span class="who g">GPT</span><span class="who c">Claude</span></li>
+      <li>주민이 알아 둘 것(언제·어디·누가·어떻게·문의), 해당할 때만</li>
+      <li>본문: 어디가 달라졌나 / 경과 / 다음</li>
+      <li>진행 상태 줄(완료·예정을 섞지 않음)<span class="who g">GPT</span></li>
+      <li>구의 설명: 구청장 발언은 끝에 한 문장, 간접 인용<span class="who c">Claude</span></li>
+      <li>원문 대조 배지 · 원문 링크 · 담당부서·전화 · 공공누리 표시<span class="who c">Claude</span></li>
+      <li>쌍둥이 고리(공약 서가 링크) · 정정 이력</li>
+    </ol></div>
+  </div>
+
+  <div class="panel" style="margin-top:18px"><h3>보도자료 → 기사 변환 규칙 10</h3><ol>
+    <li><b>1차 출처는 구청 원문 하나.</b> 숫자·고유명사·날짜는 원문 그대로. 기사 속 숫자와 따옴표 문구는 자동 대조한다.<span class="who c">Claude</span><span class="who a">Aside</span></li>
+    <li><b>원문에 없는 사실·평가·효과·주민 반응은 쓰지 않는다.</b> 해석이 꼭 필요하면 '편집자 메모'로 따로 단다.<span class="who g">GPT</span><span class="who c">Claude</span></li>
+    <li><b>자평 수식어를 뺀다</b>: 쾌거, 성공적, 대폭, 획기적, 큰 호응, ~로 자리 잡았다. 구가 스스로 한 평가를 남길 때는 "구는 ~라고 소개한다"로 출처를 붙인다.<span class="who c">Claude</span></li>
+    <li><b>제목은 "중랑구,"로 시작하지 않는다.</b> 장소·대상·변화·숫자로 연다.<span class="who c">Claude</span></li>
+    <li><b>완료·진행·예정·계획을 섞지 않는다.</b> 계획 수치에는 '계획' 표시를 단다. 기한이 지나면 상태가 자동으로 바뀐다.<span class="who g">GPT</span><span class="who a">Aside</span></li>
+    <li><b>주민이 할 일(신청·장소·기한·문의)은 상자로 뺀다.</b><span class="who a">Aside</span></li>
+    <li><b>구청장 발언은 끝에 한 문장.</b> 이름·사진 노출을 줄인다.<span class="who c">Claude</span></li>
+    <li><b>사진은 원문 첨부만.</b> 장소·대상 중심으로 고르고, 구청장 단독 사진·아동 얼굴 근접·로고·청사 전경·지난해 사진(표시 없이)은 빼거나 설명을 단다. 다른 언론사 사진은 쓰지 않는다.<span class="who a">Aside</span><span class="who g">GPT 견본에서 배움</span></li>
+    <li><b>기탁·협약 기사는 기업 소개를 줄인다.</b><span class="who c">Claude</span></li>
+    <li><b>정정은 지우지 않고 남긴다.</b> 엠바고(보도 시점)가 있는 자료는 그 시각 뒤에 싣는다.<span class="who c">Claude</span><span class="who g">GPT</span></li>
+  </ol></div>
+
+  <h2 class="sec" style="font-size:21px">하루 운영 루프 (한 자리 한 엔진)</h2>
+  <p class="secDesc">시범 기간 10/26~10/30 보도자료 등록 시각은 오전 9시 15분~9시 51분, 오후 5시 5분~5시 51분 두 묶음이었습니다.<span class="who a">Aside</span> 그래서 하루 두 번 거둡니다.</p>
+  <div class="loop">
+    <div><b>① 수집 · Aside</b>10:00 · 18:00 게시판 확인, 원문·사진 보관, 사진 규칙 점검</div>
+    <div><b>② 집필 · Claude 편집국</b>템플릿 변환, 머리기사 고르기, 약속 달력 줄 만들기</div>
+    <div><b>③ 대조 · Aside</b>숫자·이름 자동 대조, 실패하면 진열 보류</div>
+    <div><b>④ 승인 · 사람</b>엠바고·사진 권리 확인, 발행인 승인. AI 자동 발행 없음<span class="who g">GPT</span></div>
+    <div><b>⑤ 진열·사후 · Aside / GPT</b>11:00 오전판, 18:30 추가분. GPT는 주 1회 묶음 사후 대조</div>
+  </div>
+
+  <h2 class="sec" style="font-size:21px">꼭 지킬 위험 관리</h2>
+  <div class="warn"><b>공직선거법 제86조 제5항</b>: 지방자치단체(소속 공무원 포함)가 사업계획·추진실적·활동상황을 알리는 홍보물(신문·방송 이용 포함)은 <b>분기별 1종 1회</b>를 넘겨 발행·배부할 수 없고, 해당 단체장 선거일 전 180일부터는 발행할 수 없습니다. 예외로 공직선거관리규칙 제47조는 <b>소속 직원의 직무교육이나 업무추진을 위한 홍보물</b>을 듭니다.<span class="who c">Claude 제기</span><span class="who a">Aside 조문 확인</span><br><b>그래서 시범은 직원용 내부 브리핑으로 시작</b>하고, 주민 대상 공개·뉴스레터·메신저 발송은 선거관리위원회 질의와 법무 검토 뒤에 정하기를 권합니다.</div>
+  <div class="cols2">
+    <div class="panel"><h3>관보처럼 보이지 않기</h3><ul>
+      <li>영국은 2011년 지방정부 홍보 지침(Publicity Code)으로 구청 신문을 <b>연 4회 이내</b>로 묶었습니다. 지역 언론과의 불공정 경쟁을 막는다는 이유였습니다. 격주간 East End Life(타워햄리츠)는 23년 만인 2016년 문을 닫았습니다.<span class="who c">Claude</span><span class="who a">Aside 확인</span></li>
+      <li>교훈: 브리핑은 '신문 흉내'보다 <b>원문 기록과 이용 정보</b>에 머문다. 소속을 맨 위에 밝힌다.</li>
+    </ul></div>
+    <div class="panel"><h3>권리와 출처</h3><ul>
+      <li>중랑구 보도자료는 공공누리 제1유형(출처표시) 표시가 붙어 있습니다. 출처 표시로 재사용할 수 있지만, 사진 속 인물의 초상권까지 해결해 주지는 않습니다.<span class="who c">Claude</span><span class="who g">GPT</span></li>
+      <li>보도자료에 적힌 담당자 이름은 싣지 않고 부서·전화만 싣습니다.<span class="who a">Aside</span></li>
+      <li>검색 노출은 막아 두었습니다(시범판).</li>
+    </ul></div>
+  </div>
+
+  <h2 class="sec" style="font-size:21px">비슷한 사례</h2>
+  <table class="t"><thead><tr><th style="width:200px">사례</th><th>무엇을 배우나</th><th style="width:120px">출처</th></tr></thead><tbody>
+    <tr><td><a href="https://www.korea.kr/news/policyNewsList.do" target="_blank" rel="noopener">대한민국 정책브리핑</a> (korea.kr)</td><td>'정책뉴스'와 '보도자료'를 메뉴로 나눈다. 원문과 기사를 나란히 두는 구조. 제호 '중랑브리핑'과도 이름이 통한다.</td><td><span class="who c">Claude</span><span class="who a">Aside</span></td></tr>
+    <tr><td><a href="https://mediahub.seoul.go.kr/staticpage/introduce.do" target="_blank" rel="noopener">내 손안에 서울</a></td><td>서울시 시민소통포털. 매일 아침 서울 뉴스를 보낸다. 가장 가까운 국내 모델.</td><td><span class="who g">GPT</span><span class="who c">Claude</span></td></tr>
+    <tr><td><a href="https://gnews.gg.go.kr/briefing/brief_gongbo.do" target="_blank" rel="noopener">경기도 보도자료 · 경기뉴스룸</a></td><td>보도자료 원문 게시판과 뉴스룸을 나눠 둔다. 2019년 G뉴스를 일간에서 주간 심층으로 바꾼 적이 있다.</td><td><span class="who a">Aside</span></td></tr>
+    <tr><td><a href="https://guidance.publishing.service.gov.uk/publish-update-retire-content/standard-content-types/news-articles/" target="_blank" rel="noopener">GOV.UK 뉴스 기사 지침</a></td><td>'News story'는 이용자가 행동할 수 있는 정보만, 보도자료 복제는 금지. 'Press release'는 원문 그대로. 브리핑의 두 층(기사·원문) 근거.</td><td><span class="who a">Aside</span></td></tr>
+    <tr><td><a href="https://www.boston.gov/news" target="_blank" rel="noopener">Boston.gov News</a></td><td>시청이 직접 쓰는 기사형 뉴스와 RSS 피드. 부서별로 걸러 볼 수 있다.</td><td><span class="who a">Aside</span></td></tr>
+    <tr><td>서천군 생성형 AI 군정홍보 조례 (2025.5 시행)</td><td>AI 홍보물의 사실성 검증·윤리 기준·접근성을 조례로 정했다. 브리핑 운영 기준을 문서로 남길 때 참고.</td><td><span class="who a">Aside</span></td></tr>
+    <tr><td>뉴욕시 홈페이지·웹 콘텐츠 기준</td><td>시정 발표와 실용정보를 함께 배치. 독립 일간 매체인지는 확인 필요(GPT 스스로 표시).</td><td><span class="who g">GPT</span></td></tr>
+    <tr><td>영국 East End Life (반면교사)</td><td>격주간 구청 신문, 홍보 지침에 따라 2016년 폐간.</td><td><span class="who c">Claude</span></td></tr>
+  </tbody></table>
+  <p class="muted" style="font-size:14px">보도자료를 AI로 매일 기사형으로 다시 엮는 지자체 실명 사례는 두 엔진 모두 찾지 못했습니다. 세종시·광주시 등은 AI를 보도자료 <b>작성</b>에 쓰는 사례입니다.</p>
+
+  <div class="cols2" style="margin-top:18px">
+    <div class="panel"><h3>2주 시범에서 잴 것</h3><ul>
+      <li>원문 대조 통과율(목표 100%), 사람이 고친 문장 수<span class="who g">GPT</span></li>
+      <li>기사 1건 제작 시간, 보도자료 등록 뒤 진열까지 걸린 시간</li>
+      <li>자평 수식어 0, 정정 건수</li>
+      <li>직원 열람과 원문 클릭, 약속 달력 후속 확인율<span class="who g">GPT</span><span class="who a">Aside</span></li>
+    </ul></div>
+    <div class="panel"><h3>발행인이 정할 것</h3><ol>
+      <li>공개 범위: 직원용으로 시작할지, 주민 공개까지 갈지(선관위 질의 여부)</li>
+      <li>모토와 제호 표기, 시범 기간</li>
+      <li>승인 줄: 홍보담당관 언론팀과 함께할지</li>
+      <li>발행 시각(오전판·저녁 추가분)과 휴간일</li>
+      <li>저장소·주소를 독립으로 둘지, 정책미디어 안의 한 방으로 둘지</li>
+    </ol></div>
+  </div>
+</template>
+
+<template id="tpl-views">
+  <h2 class="sec">두 시선 <span class="en">GPT × CLAUDE</span></h2>
+  <p class="secDesc">2026년 10월 30일 같은 질문(타당성·위험, 유사 사례, 형식 설계, 시범 사이트 필수 5가지, 망우로 견본 기사)을 GPT 외부고문(ChatGPT 「09 중랑시그널·소포 편집실」)과 Claude에 보냈습니다. 판단이 갈린 곳은 지우지 않고 남깁니다.</p>
+  <table class="t"><thead><tr><th style="width:150px">물음</th><th><span class="who g">GPT</span></th><th><span class="who c">Claude</span></th><th style="width:240px"><span class="who a">Aside 종합</span></th></tr></thead><tbody>
+    <tr><td>총평</td><td>창간을 권함. '구청이 직접 만드는 뉴스'가 '스스로를 칭찬하는 뉴스'가 되지 않게 편집 기준부터.</td><td>의미 있음. 정답은 '보도'보다 '1차 기록'. 구 매체임을 숨기지 않는 것이 신뢰의 출발.</td><td>두 답이 같다. 정체성은 '1차 기록', 소속 고지는 맨 위.</td></tr>
+    <tr><td>가장 큰 위험</td><td>홍보물로 보이는 것. 성과와 계획을 섞지 않기.</td><td>홍보물 문제가 1순위. 영국 Publicity Code와 East End Life, 공직선거법 제86조, 엠바고.</td><td>Claude의 법·제도 지적을 조문으로 확인. 직원용 시작을 제안.</td></tr>
+    <tr><td>정체성 비유</td><td>정책미디어는 망원경, 브리핑은 창문.</td><td>정책미디어는 밖→안, 브리핑은 안→밖.</td><td>둘 다 씀. 창문(GPT) + 안→밖(Claude).</td></tr>
+    <tr><td>지면</td><td>대표기사 1 + 단신 1~3. 억지로 채우지 않기.</td><td>머리기사 1 + 단신 1~3 + 오늘의 숫자 + 원문 목록.</td><td>합침. 약속 달력을 더함.</td></tr>
+    <tr><td>템플릿 차이</td><td>완료·진행·계획 구분, 주민에게 달라지는 점.</td><td>구의 설명(끝, 한 문장), 사진 출처, 정정 이력.</td><td>둘 다 넣음. 상태는 날짜 따라 자동 갱신.</td></tr>
+    <tr><td>검증</td><td>AI 초안 → 담당자 사실 확인 → 편집 승인. 자동 발행 금지.</td><td>숫자·고유명사 원문 대조표를 자동으로.</td><td>자동 대조 배지를 실제로 구현. 사람 승인 유지.</td></tr>
+    <tr><td>필수 5가지</td><td>1면·아카이브, 원문·사진 출처, 상태 표시, 정정·오류 신고, 정책미디어 연결.</td><td>소속 고지, 원문 대조 배지, 부서·연락처·공공누리, 정정 페이지, 아카이브·태그·뉴스레터·연결.</td><td>뉴스레터는 선거법 검토 뒤로 미룸. 나머지는 시범판에 반영.</td></tr>
+  </tbody></table>
+  <h2 class="sec" style="font-size:21px">망우로 견본 기사 둘</h2>
+  <!--SAMPLES-->
+</template>
+
+<footer class="wrap">중랑브리핑(시범판) · 발행 중랑정책주방(정책실) · 쌍둥이 매체 <a href="https://jungnang-media.vercel.app/" target="_blank" rel="noopener">중랑정책미디어</a><br>원료: <a href="https://www.jungnang.go.kr/portal/bbs/list/B0000151.do?menuNo=200474" target="_blank" rel="noopener">중랑구청 보도자료</a> · 본문과 사진의 출처는 중랑구청이며 공공누리 제1유형(출처표시)에 따라 이용합니다. 기사는 원문의 사실만 다시 엮었고, 해석·평가는 넣지 않았습니다.<br>설계: GPT 외부고문 · Claude 편집국 의견을 Aside 통합 데스크가 합침(2026.10.30).</footer>
+<script src="data/brief.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
