@@ -1,27 +1,28 @@
-# 중랑브리핑 · JUNGNANG BRIEFING (시범판)
+# 중랑브리핑 · JUNGNANG BRIEFING
 
-중랑구청 보도자료를 원료로, 읽는 사람이 **무엇이 달라지나 · 언제 · 어디서 · 누구에게 물어보나**를 3분 안에 알게 하는 1차 기록 매체입니다. 중랑정책미디어(https://jungnang-media.vercel.app)가 밖을 보는 망원경(밖 → 안)이라면, 중랑브리핑은 중랑의 오늘을 비추는 창문(안 → 밖)입니다.
+나의 자랑 우리 중랑. 중랑구청 보도자료를 원료로, 읽는 사람이 **무엇이 달라지나 · 언제 · 어디서 · 누구에게 물어보나**를 알게 하는 1차 기록 매체입니다. 기사는 **민선9기 7대 공약 비전**별로 묶어 봅니다. 쌍둥이 매체 중랑정책미디어(https://jungnang-media.vercel.app)가 밖을 보는 망원경이라면, 중랑브리핑은 중랑의 오늘을 비추는 창문입니다.
 
-- 사이트: https://jungnang-briefing.vercel.app (검색 노출 막음, 비공식 시범판)
-- 시범판 원료: 2026-10-26 ~ 10-30 중랑구청 보도자료 10건
-- 설계: GPT 외부고문 · Claude 편집국에 같은 질문을 던지고 Aside 통합 데스크가 합침(2026-10-30). 사이트 '설계도'·'두 시선' 메뉴에 전문.
-- 공개 범위·모토·승인 줄·발행 시각은 발행인 결정 전입니다.
+- 사이트: https://jungnang-briefing.vercel.app (검색 노출 막음)
+- 시범운영: 2026-11-01 ~ 11-30, 매일 10:30·18:30 자동 게시(원문 자동 대조 통과분만). 운영 홍보담당관(인계 예정), 설계·자동화 정책실.
+- 처음 채운 자료: 2026년 10월 보도자료 46건
+- 웹 게시만 합니다(카카오톡·문자·SNS 발송, 인쇄 배부 없음).
+- 색: 구 슬로건 지정색 초록 #006939 · 자주 #A81B8F · 파랑 #0055B8
 
 ## 구조
 
 | 파일 | 내용 |
 |-|-|
 | `index.html` | 화면 틀, 설계도·두 시선 템플릿 |
-| `app.js` | 해시 라우팅(오늘 판·지난 판·기사·약속 달력), 상태 자동 갱신, **원문 자동 대조** |
-| `style.css` | 정책미디어와 같은 신문 문법, 청록 강조색 |
-| `data/brief.js` | 판(editions)·기사(articles: 변환문 + 원문 전문)·두 엔진 견본 |
+| `app.js` | 해시 라우팅(첫 화면·공약 섹션·기사·약속 달력·날짜별), 상태 자동 갱신, **원문 자동 대조** |
+| `style.css` | 신문 문법, 슬로건 지정색 |
+| `data/brief.js` | `window.BRIEF = {updated, pilot, articles, samples}`. 기사 = 변환문 + 원문 전문 |
 | `img/` | 원문 첨부 사진 웹용(webp). 실제로 쓰는 사진만 둔다 |
 
 ## 기사 데이터 한 건
 
-`id`(구청 게시물 번호) · `date` · `lead` · `sec` · `vision`(7대 비전 번호) · `status[{s,t,until}]` · `title` · `dek` · `lede` · `nums[[값,설명]]` · `act[[항목,내용]]` · `blocks[[소제목,[문단]]]` · `said` · `photos[[파일,설명]]` · `photoNote` · `next[{d,t,until}]` · `src{title,url,dept,tel,reg,body}`
+`id`(구청 게시물 번호) · `date` · `weight`(1~3) · `sec` · `vision`(7대 비전 번호, 첫 번째가 주 섹션, 0 = 구정·안전) · `ax` · `status[{s,t,until}]` · `title` · `dek` · `lede` · `nums[[값,설명]]` · `act[[항목,내용]]` · `blocks[[소제목,[문단]]]` · `said` · `photos[[파일,설명]]` · `photoNote` · `next[{d,t,until}]` · `src{title,url,dept,tel,reg,body}`
 
-새 판을 올릴 때: 기사 객체를 `articles`에, 판을 `editions` 맨 앞에 넣는다. 화면의 원문 대조 배지가 '통과'가 아니면 진열하지 않는다.
+새 기사를 올릴 때: 기사 객체를 `articles` 앞에 넣고 `updated`를 바꾼다. 원문 대조(숫자는 다른 숫자의 일부 인정 안 함, 따옴표 문구 포함)가 통과하지 않으면 올리지 않는다. 절차: policy-media-desk/references/briefing-twin.md '자동 운영 절차'.
 
 ## 변환 규칙 요약
 
