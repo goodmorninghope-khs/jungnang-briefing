@@ -101,9 +101,24 @@ function card(a){
   return `<article class="card">${ph(a)}<div class="in"><div class="eyebrow" style="color:${SEC(prim(a)).c}">${SEC(prim(a)).name} · ${fmt(a.date)}</div><h3><a href="#/a/${a.id}">${esc(a.title)}</a></h3><div>${stB(a)}</div><p>${esc(a.dek)}</p></div></article>`;
 }
 
+let TWIN = []; // 쌍둥이 매체 중랑정책미디어(밖에서 본 길)
+const VN = ['', '교육', '경제', '교통', '주거', '문화', '복지', '걷기'];
+async function loadTwin(){
+  try {
+    const [pm, ed] = await Promise.all(['/twin/pledge-map.json', '/twin/editions.json'].map(u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null)));
+    const out = new Map();
+    for (const m of ((pm && pm.items) || [])) { const v = (m.pledges || []).map(p => '①②③④⑤⑥⑦'.indexOf(p) + 1).filter(n => n > 0); if (v.length) out.set(m.id, { id: m.id, title: m.title, date: (m.date || '').replace(/\./g, '-'), series: m.series, v }); }
+    for (const e of (Array.isArray(ed) ? ed : [])) { const ps = [...(e.pledges || []), ...((e.signals || []).map(s => s.pledge || ''))].join(' '); const v = VN.map((n, i) => i && ps.includes(n) ? i : 0).filter(Boolean); if (v.length) out.set(e.id, { id: e.id, title: e.title, date: (e.date || '').replace(/\./g, '-'), series: e.series, v }); }
+    TWIN = [...out.values()].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  } catch (e) { }
+}
+const twinIn = v => TWIN.filter(x => x.v.includes(v));
+const twinBox = (v, n) => { const l = twinIn(v).slice(0, n); return l.length ? `<div class="twin"><b>밖에서 본 같은 길 · 중랑정책미디어</b><p class="muted" style="font-size:13px;margin:2px 0 6px">같은 공약 비전을 다른 곳은 어떻게 풀었는지, 국내외 사례로 읽습니다.</p><ul>${l.map(x => `<li><a href="${MEDIA}#/read/${encodeURIComponent(x.id)}" target="_blank" rel="noopener">${esc(x.title)}</a> <span class="muted" style="font-size:12px">${esc(x.series || '')} · ${fmt(x.date)}</span></li>`).join('')}</ul></div>` : ''; };
+
 function section(v){
   const s = SEC(v), list = inSec(v);
   return `<div class="sechead" style="--c:${s.c}"><div class="eyebrow" style="color:${s.c}">${v ? '민선9기 7대 공약 비전 ' + v : '공통 실행'}</div><h1>${esc(s.full)}</h1><p class="muted" style="margin:4px 0 0">${list.length}건 · 보도자료의 주 분야로 묶었습니다(편집 분류). 같은 비전의 밖의 사례는 <a href="${MEDIA}#/pledge" target="_blank" rel="noopener">중랑정책미디어 공약 서가 ↗</a></p></div>
+  ${v ? twinBox(v, 4) : ''}
   ${list.length ? `<div class="cards">${list.map(card).join('')}</div>` : '<p class="muted">아직 기사가 없습니다.</p>'}`;
 }
 
@@ -125,6 +140,7 @@ function article(id){
     ${a.photoNote ? `<p class="muted" style="font-size:13px">사진 메모: ${esc(a.photoNote)}</p>` : ''}
     ${a.said ? `<p class="said"><b>구의 설명</b>${esc(a.said)}</p>` : ''}
     <details class="orig"><summary>보도자료 원문 전문 보기 (원문 대조용)</summary><pre>${hl(a, c)}</pre></details>
+    ${twinBox(prim(a), 3)}
     ${rel.length ? `<div class="related"><b style="color:${s.c}">같은 공약(${esc(s.name)})의 다른 기사</b><ul>${rel.map(x => `<li><a href="#/a/${x.id}">${esc(x.title)}</a> <span class="muted" style="font-size:12px">${fmt(x.date)}</span></li>`).join('')}</ul></div>` : ''}
   </div>
   <aside>
@@ -186,4 +202,5 @@ $('#secnav').innerHTML = SECS.map(s => `<a class="sub" href="#/s/${s.v}" style="
 $('#today').textContent = fmtY(TODAY) + ' · 기사 ' + ALL.length + '건 · 갱신 ' + (B.updated||'').slice(0,16).replace('T',' ');
 window.addEventListener('hashchange', render);
 render();
+loadTwin().then(() => { if (TWIN.length) render(); });
 })();
