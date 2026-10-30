@@ -166,3 +166,8 @@ table.t th{background:#eef2ec}
 footer{border-top:1px solid var(--line);padding:16px 0 40px;font-size:13px;color:var(--muted)}
 footer .tri{margin-bottom:14px}
 @media (max-width:960px){.top,.body2,.art,.cols2,.two{grid-template-columns:1fr}.blocks{grid-template-columns:1fr}.twinmap{grid-template-columns:1fr}.loop{grid-template-columns:1fr 1fr}.gallery{grid-template-columns:1fr 1fr}.tick{grid-template-columns:1fr}.mast{grid-template-columns:1fr}.sloganBox{justify-self:start;text-align:left}}
+
+/* 쌍둥이 매체 · 중랑정책미디어 */
+.twin{border:1px solid #d9d3c5;border-left:4px solid #18264a;background:#f6f3ec;padding:10px 14px;margin:18px 0;border-radius:4px}
+.twin b{color:#18264a}
+.twin ul{margin:4px 0 0;padding-left:18px}
