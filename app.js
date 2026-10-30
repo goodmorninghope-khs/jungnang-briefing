@@ -25,7 +25,7 @@ const inSec = v => ALL.filter(a => prim(a) === v);
 const live = s => { if (!s.until || s.until >= TODAY) return s.s; return s.s === '모집' ? '마감' : (s.s === '진행' || s.s === '예정') ? '종료' : s.s; };
 const stB = a => [...new Set(a.status.map(live))].map(s => `<span class="st ${s}">${s}</span>`).join('');
 const vtag = v => { const s = SEC(v); return `<a class="vtag" style="background:${s.c}" href="#/s/${s.v}">${s.name}</a>`; };
-const tags = a => (a.vision||[0]).map(vtag).join('') + (a.ax ? '<span class="vtag" style="background:#1b2430">AX</span>' : '');
+const tags = a => (a.vision||[0]).map(vtag).join('') + (Array.isArray(a.ax) ? a.ax : (a.ax ? ['AX'] : [])).map(x => `<span class="vtag ax" title="씨줄 · 중랑 AX2030 ${esc(x)} ${esc(((B.axNames||{})[x])||'')}(편집 분류)" style="background:#1b2430">AX${esc(x === 'AX' ? '' : x)}</span>`).join('');
 const ph = (a, cls) => a.photos && a.photos[0] ? `<a class="ph ${cls||''}" href="#/a/${a.id}"><img src="img/${a.photos[0][0]}" alt="${esc(a.photos[0][1])}" loading="lazy"></a>` : '';
 
 /* 원문 대조: 기사 속 숫자(쉼표 제거, 다른 숫자 속 일부는 인정 안 함)와 따옴표 문구가 원문(제목·본문·등록일)에 있는지 */
@@ -147,7 +147,7 @@ function article(id){
     <div class="check">${ok ? '<div class="ok">원문 대조 통과</div>' : '<div class="bad">원문 대조 확인 필요</div>'}
       <small>숫자 ${c.nums.length}개 중 ${c.nums.length - c.nMiss.length}개, 따옴표 속 문구 ${c.qs.length}개 중 ${c.qs.length - c.qMiss.length}개가 원문(제목·본문·등록일)에 있습니다.${c.nMiss.length ? ' 원문에 없는 숫자: ' + esc(c.nMiss.join(', ')) : ''}${c.qMiss.length ? ' 원문에 없는 문구: ' + esc(c.qMiss.join(', ')) : ''}<br>페이지가 열릴 때마다 다시 계산합니다. 문장의 뜻은 담당자가 봅니다.</small></div>
     <div class="srcBox"><b>원문과 문의</b><dl><dt>원문</dt><dd><a href="${a.src.url}" target="_blank" rel="noopener">${esc(a.src.title)}</a></dd><dt>담당</dt><dd>${esc(a.src.dept)}</dd><dt>전화</dt><dd>${esc(a.src.tel)}</dd><dt>등록</dt><dd>${esc(a.src.reg)}</dd><dt>저작권</dt><dd>공공누리 제1유형(출처표시) · 출처 중랑구청</dd></dl></div>
-    <div class="twinbox"><h3 style="margin:0 0 6px;font-size:13px;letter-spacing:2px">쌍둥이 고리</h3>이 기사의 공약 분류: ${(a.vision||[0]).map(v => SEC(v).full).join(', ')}${a.ax ? ', AX' : ''}(편집 분류).<br>같은 비전의 밖의 사례는 <a href="${MEDIA}#/pledge" target="_blank" rel="noopener">중랑정책미디어 공약 서가 ↗</a>에서 봅니다.${a.next && a.next.length ? `<br>후속 일정 ${a.next.length}건이 <a href="#/next">약속 달력</a>에 있습니다.` : ''}</div>
+    <div class="twinbox"><h3 style="margin:0 0 6px;font-size:13px;letter-spacing:2px">쌍둥이 고리</h3>이 기사의 공약 분류: ${(a.vision||[0]).map(v => SEC(v).full).join(', ')}${Array.isArray(a.ax) && a.ax.length ? ' · 씨줄 ' + a.ax.map(x => 'AX' + x + ' ' + ((B.axNames||{})[x]||'')).join(', ') : ''}(편집 분류).<br>같은 비전의 밖의 사례는 <a href="${MEDIA}#/pledge" target="_blank" rel="noopener">중랑정책미디어 공약 서가 ↗</a>에서 봅니다.${a.next && a.next.length ? `<br>후속 일정 ${a.next.length}건이 <a href="#/next">약속 달력</a>에 있습니다.` : ''}</div>
     <p class="muted" style="font-size:13px;margin-top:14px">정정 이력: 없음 · 사실이 다르면 담당부서나 홍보담당관에 알려 주세요. 정정은 이전 문장을 지우지 않고 함께 남깁니다.</p>
   </aside></div>`;
 }
