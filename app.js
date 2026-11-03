@@ -52,7 +52,8 @@ function front(){
   const withPh = ALL.filter(a => a.photos && a.photos.length);
   const latestDate = ALL[0].date;
   const recent = ALL.filter(a => a.date >= addDays(latestDate, -3));
-  const lead = recent.filter(a => a.photos && a.photos.length).sort((a,b) => (b.weight||1)-(a.weight||1) || b.date.localeCompare(a.date))[0] || ALL[0];
+  const pinned = B.pin && byId(B.pin);
+  const lead = pinned || recent.filter(a => a.photos && a.photos.length).sort((a,b) => (b.weight||1)-(a.weight||1) || b.date.localeCompare(a.date))[0] || ALL[0];
   const subs = ALL.filter(a => a !== lead).sort((a,b) => b.date.localeCompare(a.date) || (b.weight||1)-(a.weight||1)).filter(a => a.photos && a.photos.length).slice(0,4);
   const numSrc = ALL.find(a => a !== lead && (a.weight||1) >= 3 && a.nums && a.nums.length) || ALL.find(a => a !== lead && a.nums && a.nums.length);
   const tick = ALL.filter(a => a !== lead && !subs.includes(a)).slice(0,10);
@@ -62,7 +63,7 @@ function front(){
   return `
   <div class="top">
     <article class="hero">${ph(lead)}
-      <div class="in"><div class="eyebrow" style="color:${SEC(prim(lead)).c}">머리기사 · ${SEC(prim(lead)).name} · ${fmt(lead.date)}</div>
+      <div class="in"><div class="eyebrow" style="color:${SEC(prim(lead)).c}">${pinned ? '고정 머리기사' : '머리기사'} · ${SEC(prim(lead)).name} · ${fmt(lead.date)}</div>
       <h1><a href="#/a/${lead.id}">${esc(lead.title)}</a></h1><p class="dek">${esc(lead.dek)}</p><div>${stB(lead)}${tags(lead)}</div></div>
     </article>
     <div class="subs">
