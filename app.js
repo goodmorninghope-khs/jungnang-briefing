@@ -26,17 +26,24 @@ const live = s => { if (!s.until || s.until >= TODAY) return s.s; return s.s ===
 const stB = a => [...new Set(a.status.map(live))].map(s => `<span class="st ${s}">${s}</span>`).join('');
 const vtag = v => { const s = SEC(v); return `<a class="vtag" style="background:${s.c}" href="#/s/${s.v}">${s.name}</a>`; };
 const tags = a => (a.vision||[0]).map(vtag).join('') + (Array.isArray(a.ax) ? a.ax : (a.ax ? ['AX'] : [])).map(x => `<span class="vtag ax" title="씨줄 · 중랑 AX2030 ${esc(x)} ${esc(((B.axNames||{})[x])||'')}(편집 분류)" style="background:#1b2430">AX${esc(x === 'AX' ? '' : x)}</span>`).join('');
+/* 메인 배치 우선순위(발행인 2026-11-19): 가장 최근 기사 중 공약·AX2030 연결도(fit)가 높은 기사부터 */
+const axArr = a => Array.isArray(a.ax) ? a.ax : (a.ax ? ['AX'] : []);
+const ago = a => Math.round((Date.parse(ALL[0].date) - Date.parse(a.date)) / 864e5);
+const fitOf = a => a.fit != null ? a.fit : (prim(a) ? 1 : 0);
+const pri = a => fitOf(a) * 10 + (prim(a) ? 2 : 0) + (axArr(a).length ? 2 : 0) + (a.weight || 1) + (a.photos && a.photos.length ? 2 : 0) - ago(a) * 2.5;
+const byPri = (x, y) => pri(y) - pri(x) || y.date.localeCompare(x.date);
+const fitChip = a => a.fitWhy ? `<span class="fitchip" title="공약·AX2030 연결도 ${fitOf(a)}/3 (편집 분류)">${esc(a.fitWhy)}</span>` : '';
 const ph = (a, cls) => a.photos && a.photos[0] ? `<a class="ph ${cls||''}" href="#/a/${a.id}"><img src="img/${a.photos[0][0]}" alt="${esc(a.photos[0][1])}" loading="lazy"></a>` : '';
 
 /* 원문 대조: 기사 속 숫자(쉼표 제거, 다른 숫자 속 일부는 인정 안 함)와 따옴표 문구가 원문(제목·본문·등록일)에 있는지 */
 function check(a){
   const n = s => s.replace(/(\d),(?=\d{3})/g,'$1'), sp = s => s.replace(/\s+/g,'');
   const corpus = n(a.src.title + ' ' + a.src.body + ' ' + a.src.reg);
-  const all = n([a.title,a.dek,a.lede,...(a.nums||[]).flat(),...a.blocks.flatMap(b=>b[1]),a.said||'',...(a.act||[]).flat(),...a.status.map(s=>s.t)].join(' '));
+  const all = n([a.title,a.dek,a.lede,...(a.nums||[]).flat(),...a.blocks.flatMap(b=>[b[0],...b[1]]),a.said||'',...(a.act||[]).flat(),...a.status.map(s=>s.t)].join(' '));
   const nums = [...new Set(all.match(/\d+(?:\.\d+)?/g) || [])];
   const has = x => new RegExp('(?<![\\d.])' + x.replace('.', '\\.') + '(?![\\d]|\\.\\d)').test(corpus);
   const nMiss = nums.filter(x => !has(x));
-  const raw = [a.title,a.dek,a.lede,...a.blocks.flatMap(b=>b[1]),...(a.act||[]).flat()].join(' ');
+  const raw = [a.title,a.dek,a.lede,...a.blocks.flatMap(b=>[b[0],...b[1]]),a.said||'',...(a.act||[]).flat()].join(' ');
   const qs = [...new Set([...raw.matchAll(/[‘“「]([^’”」]+)[’”」]/g)].map(m=>m[1]))];
   const qMiss = qs.filter(q => !sp(a.src.title + a.src.body).includes(sp(q)));
   return {nums, nMiss, qs, qMiss};
@@ -51,10 +58,10 @@ function upcoming(){
 function front(){
   const withPh = ALL.filter(a => a.photos && a.photos.length);
   const latestDate = ALL[0].date;
-  const recent = ALL.filter(a => a.date >= addDays(latestDate, -3));
+  const recent = ALL.filter(a => a.date >= addDays(latestDate, -7));
   const pinned = B.pin && byId(B.pin);
-  const lead = pinned || recent.filter(a => a.photos && a.photos.length).sort((a,b) => (b.weight||1)-(a.weight||1) || b.date.localeCompare(a.date))[0] || ALL[0];
-  const subs = ALL.filter(a => a !== lead).sort((a,b) => b.date.localeCompare(a.date) || (b.weight||1)-(a.weight||1)).filter(a => a.photos && a.photos.length).slice(0,4);
+  const lead = pinned || recent.filter(a => a.photos && a.photos.length).sort(byPri)[0] || ALL[0];
+  const subs = recent.filter(a => a !== lead && a.photos && a.photos.length).sort(byPri).concat(ALL.filter(a => a !== lead && a.photos && a.photos.length && !recent.includes(a))).slice(0,4);
   const numSrc = ALL.find(a => a !== lead && (a.weight||1) >= 3 && a.nums && a.nums.length) || ALL.find(a => a !== lead && a.nums && a.nums.length);
   const tick = ALL.filter(a => a !== lead && !subs.includes(a)).slice(0,10);
   const used = new Set([lead, ...subs].map(a => a.id));
@@ -64,11 +71,11 @@ function front(){
   <div class="top">
     <article class="hero">${ph(lead)}
       <div class="in"><div class="eyebrow" style="color:${SEC(prim(lead)).c}">${pinned ? '고정 머리기사' : '머리기사'} · ${SEC(prim(lead)).name} · ${fmt(lead.date)}</div>
-      <h1><a href="#/a/${lead.id}">${esc(lead.title)}</a></h1><p class="dek">${esc(lead.dek)}</p><div>${stB(lead)}${tags(lead)}</div></div>
+      <h1><a href="#/a/${lead.id}">${esc(lead.title)}</a></h1><p class="dek">${esc(lead.dek)}</p><div>${fitChip(lead)}${stB(lead)}${tags(lead)}</div><p class="leadlede">${esc(lead.lede)} <a href="#/a/${lead.id}">기사 전문 →</a></p></div>
     </article>
     <div class="subs">
       ${numSrc ? `<div class="numbox"><div class="l">오늘의 숫자</div><b>${esc(numSrc.nums[0][0])}</b><p>${esc(numSrc.nums[0][1])} · <a href="#/a/${numSrc.id}">${esc(numSrc.sec)}</a></p></div>` : ''}
-      ${subs.map(a => `<article>${ph(a)}<div><div class="eyebrow" style="color:${SEC(prim(a)).c}">${SEC(prim(a)).name} · ${fmt(a.date)}</div><h3><a href="#/a/${a.id}">${esc(a.title)}</a></h3></div></article>`).join('')}
+      ${subs.map(a => `<article>${ph(a)}<div><div class="eyebrow" style="color:${SEC(prim(a)).c}">${SEC(prim(a)).name} · ${fmt(a.date)}</div><h3><a href="#/a/${a.id}">${esc(a.title)}</a></h3>${a.fitWhy && fitOf(a) >= 2 ? `<div class="subfit">${esc(a.fitWhy)}</div>` : ''}</div></article>`).join('')}
     </div>
   </div>
   <div class="tick"><div class="hd">최신 기사</div>${tick.map(a => `<li><span class="d">${fmt(a.date)}</span><a href="#/a/${a.id}">${esc(a.title)}</a></li>`).join('')}</div>
@@ -91,7 +98,7 @@ function addDays(d, n){ const t = new Date(d + 'T00:00:00Z'); t.setUTCDate(t.get
 function block(s){
   const list = inSec(s.v);
   if (!list.length) return `<section class="blk" style="--c:${s.c}"><header><a class="t" href="#/s/${s.v}">${s.v ? s.v + '. ' : ''}${esc(s.name)}</a><small>${esc(s.full)}</small></header><div class="empty">이번 기간에 들어온 보도자료가 없습니다. 쌍둥이 매체 <a href="${MEDIA}#/pledge" target="_blank" rel="noopener">공약 서가</a>에서 밖의 사례를 볼 수 있습니다.</div></section>`;
-  const f = list.find(a => a.photos && a.photos.length) || list[0];
+  const f = list.filter(a => a.photos && a.photos.length).sort(byPri)[0] || list.slice().sort(byPri)[0];
   const rest = list.filter(a => a !== f).slice(0,3);
   return `<section class="blk" style="--c:${s.c}"><header><a class="t" href="#/s/${s.v}">${s.v ? s.v + '. ' : ''}${esc(s.name)} · ${list.length}건 →</a><small>${esc(s.full)}</small></header>
   <div class="feat">${ph(f) || '<span></span>'}<div><h3><a href="#/a/${f.id}">${esc(f.title)}</a></h3><p>${stB(f)}${fmt(f.date)}</p></div></div>
@@ -130,16 +137,16 @@ function article(id){
   return `<div class="art"><div>
     <div class="eyebrow" style="color:${s.c}">${esc(s.name)} · ${esc(a.sec)} · ${fmtY(a.date)}</div>
     <h1>${esc(a.title)}</h1><p class="dek">${esc(a.dek)}</p>
-    <div class="meta">${stB(a)} ${tags(a)}<br>원료 보도자료 등록 ${esc(a.src.reg)} · AI 변환, 원문 자동 대조 · 사실 출처는 모두 아래 원문</div>
+    <div class="meta">${fitChip(a)}${stB(a)} ${tags(a)}<br>원료 보도자료 등록 ${esc(a.src.reg)} · AI 변환, 원문 자동 대조 · 사실 출처는 모두 아래 원문</div>
     ${a.photos && a.photos[0] ? `<figure><img src="img/${a.photos[0][0]}" alt="${esc(a.photos[0][1])}"><figcaption>${esc(a.photos[0][1])} · 사진 중랑구 제공(공공누리 제1유형)</figcaption></figure>` : ''}
     <p class="lede">${esc(a.lede)}</p>
     ${a.nums && a.nums.length ? `<div class="nums">${a.nums.map(x => `<div><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>` : ''}
     ${a.act && a.act.length ? `<div class="act"><h4>주민이 알아 둘 것</h4><dl>${a.act.map(x => `<dt>${esc(x[0])}</dt><dd>${esc(x[1])}</dd>`).join('')}</dl></div>` : ''}
-    ${a.blocks.map(b => `<h4>${esc(b[0])}</h4>${b[1].map(p => `<p>${esc(p)}</p>`).join('')}`).join('')}
+    <div class="artbody">${a.blocks.map(b => `${b[0] ? `<h4>${esc(b[0])}</h4>` : ''}${b[1].map(p => `<p>${esc(p)}</p>`).join('')}`).join('')}${a.said ? `<p>${esc(a.said)}</p>` : ''}</div>
     <h4>진행 상태</h4><ul class="track">${a.status.map(x => `<li><span class="st ${live(x)}">${live(x)}</span>${esc(x.t)}</li>`).join('')}</ul>
     ${(a.photos||[]).slice(1).map(p => `<figure><img src="img/${p[0]}" alt="${esc(p[1])}" loading="lazy"><figcaption>${esc(p[1])} · 사진 중랑구 제공(공공누리 제1유형)</figcaption></figure>`).join('')}
     ${a.photoNote ? `<p class="muted" style="font-size:13px">사진 메모: ${esc(a.photoNote)}</p>` : ''}
-    ${a.said ? `<p class="said"><b>구의 설명</b>${esc(a.said)}</p>` : ''}
+    
     <details class="orig"><summary>보도자료 원문 전문 보기 (원문 대조용)</summary><pre>${hl(a, c)}</pre></details>
     ${twinBox(prim(a), 3)}
     ${rel.length ? `<div class="related"><b style="color:${s.c}">같은 공약(${esc(s.name)})의 다른 기사</b><ul>${rel.map(x => `<li><a href="#/a/${x.id}">${esc(x.title)}</a> <span class="muted" style="font-size:12px">${fmt(x.date)}</span></li>`).join('')}</ul></div>` : ''}
